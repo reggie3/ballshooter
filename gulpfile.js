@@ -9,8 +9,27 @@ var gulp = require('gulp'),
   uglify = require('gulp-uglify'),
   plumber = require('gulp-plumber'),
   useref = require('gulp-useref'),  //used to replace references to individual js files
- uglifycss = require('gulp-uglifycss');
+ uglifycss = require('gulp-uglifycss'),
+ connect = require('gulp-connect');;
 
+
+//open dev files in server
+gulp.task('connectDev', function () {
+  connect.server({
+    root: ['source'],
+    port: 8000,
+    livereload: true
+  });
+});
+ 
+//open dist files in server 
+gulp.task('connectDist', function () {
+  connect.server({
+    root: 'dist',
+    port: 8001,
+    livereload: true
+  });
+});
 
 //minimize my js files
 gulp.task("minjs", ['clean'], function () {
@@ -22,8 +41,6 @@ gulp.task("minjs", ['clean'], function () {
 
   gulp.src("./source/js/*.js")
     .pipe(plumber())
-    .pipe(concat('vendor.js'))
-    .pipe(uglify())
     .pipe(gulp.dest("./dist/js/"));
 
   gulp.src("./source/sounds/*.js")
